@@ -1,3 +1,7 @@
+# SHAP will install several other packages, including matplotlib and Pandas
+# Do not specify versions for those packages here to avoid conflicts with the version SHAP uses
+shap==0.27.*
+
 tensorflow==2.4.*
 # Tensorflow will also install NumPy, picking a compatible version
 #numpy==
