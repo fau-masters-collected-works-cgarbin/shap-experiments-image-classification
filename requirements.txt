@@ -1,0 +1,10 @@
+tensorflow==2.4.*
+# Tensorflow will also install NumPy, picking a compatible version
+#numpy==
+
+jupyterlab==3.0.*
+
+# linters
+autopep8
+pydocstyle
+flake8
