@@ -1,3 +1,4 @@
 env/
+__pycahe__
 .ipynb_checkpoints/
 mnist_data/

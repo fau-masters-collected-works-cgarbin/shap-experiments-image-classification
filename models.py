@@ -1,7 +1,6 @@
 """Models and training/test fnuctions."""
 
 import torch
-import torchvision
 from torchvision import datasets, transforms
 from torch import nn, optim
 from torch.nn import functional as F
@@ -89,3 +88,10 @@ test_loader = torch.utils.data.DataLoader(
         transforms.ToTensor()
     ])),
     batch_size=BATCH_SIZE, shuffle=True)
+
+
+def train_model(model, num_epochs):
+    opt = optimizer(model)
+    for epoch in range(1, num_epochs + 1):
+        train(model, DEVICE, train_loader, opt, epoch)
+        test(model, DEVICE, test_loader)
