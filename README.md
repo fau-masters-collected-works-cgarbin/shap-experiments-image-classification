@@ -4,8 +4,8 @@ This repository explores how to interpret predictions of an image classification
 
 The goals of the experiments are to:
 
-1. Explore how SHAP explain the predictions. This experiment uses a (fairly) accurate network to understand how SHAP attributes the predictions.
-1. Explore how SHAP behaves with innacurate predictions. This experiment uses a network with lower accuracy and prediction probabilities that are less robust (more spread among the classes) to understand how SHAP behaves when the predicitons are not reliable (a hat tip to [Dr. Rudin's work](https://arxiv.org/abs/1811.10154)).
+1. Explore how SHAP explains the predictions. This experiment uses a (fairly) accurate network to understand how SHAP attributes the predictions.
+1. Explore how SHAP behaves with inaccurate predictions. This experiment uses a network with lower accuracy and prediction probabilities that are less robust (more spread among the classes) to understand how SHAP behaves when the predictions are not reliable (a hat tip to [Dr. Rudin's work](https://arxiv.org/abs/1811.10154)).
 
 SHAP has multiple explainers. The code uses the DeepExplainer explainer because it is the one used in the [image classification SHAP sample code](https://shap.readthedocs.io/en/latest/image_examples.html).
 
@@ -38,20 +38,20 @@ Some candidates for research questions are noted in the explanations.
 
 ### Accurate network
 
-This section explores the feature attribution using the (fairly) accurate network. This network achieves 97% overal accuracy.
+This section explores the feature attribution using the (fairly) accurate network. This network achieves 97% overall accuracy.
 
 Each picture below shows these pieces of information:
 
 - The leftmost digit is the example from the MNIST dataset that the network predicted. The text at the top of the picture shows the actual and predicted values. The predicted value is the largest of all probabilities (without applying a threshold).
-- Following that digit, there are ten digits, one for each class (from left to right: zero to nine), with the feature attributions overlaid on each digit. The text at the top shows the probability the network assigned for that class.
+- Following that digit, there are ten digits, one for each class (from left to right: zero to nine), with the feature attributions overlaid on each digit. The text at the top shows the probability that the network assigned for that class.
 
 Some of the feature attributions are easy to interpret. For example, this is the attribution for a digit "1".
 
 ![Accurate digit 1](figures/accurate-digit-1.png)
 
-We can see that the presence of the vertical pixels at the center of the image increase the probability of predicting a digit "1", as we would expect. The absence of pixels around that vertical line also increase the probability.
+We can see that the presence of the vertical pixels at the center of the image increases the probability of predicting a digit "1", as we would expect. The absence of pixels around that vertical line also increases the probability.
 
-The two examples for the digit "8" below are also easy to interpret. We can see that the blank space in the top loop and the blank spaces on both sides of the middle part of the image are important to define a "8".
+The two examples for the digit "8" below are also easy to interpret. We can see that the blank space in the top loop and the blank spaces on both sides of the middle part of the image are important to define an "8".
 
 ![Accurate digit 8](figures/accurate-digit-8-1.png)
 
@@ -63,7 +63,7 @@ In the first example we can see which pixels are more relevant (red) to predict 
 
 In the second picture, the more salient attributions are on the second-highest probability, the digit "7". It's almost as if the network "worked harder" to reject that digit than to predict the digit "2". Although the probability of the digit "7" is higher in this second example (compared to the digit "7" in the first example), it's still far away from the probability assigned to the digit "2".
 
-**RESEARCH QUESTION 1**: What causes SHAP to sometimes to highlight the attributions of a class that was not assigned the highest probability?
+**RESEARCH QUESTION 1**: What causes SHAP to sometimes highlight the attributions of a class that was not assigned the highest probability?
 
 ![Accurate digit 2](figures/accurate-digit-2-1.png)
 
@@ -71,22 +71,32 @@ In the second picture, the more salient attributions are on the second-highest p
 
 ### Inaccurate network
 
-This section explores the feature attribution using the inaccurate network. This network achieves 87% overall accuracy. Besides the low overall accuracy, each prediction also has a larger spread of probabilities. The difference between the largest and the second-largest probabiliy in some cases is very small, as we will soon see.
+This section explores the feature attribution using the inaccurate network. This network achieves 87% overall accuracy. Besides the low overall accuracy, each prediction also has a larger spread of probabilities. The difference between the largest and the second-largest probability in some cases is very small, as we will soon see.
 
-In the example for the digit "0" below, the network incorrectly predicted it as "5". But it didn't miss by much. The difference in probability between "5" (incorrect) and "0" (correct) is barely 1%. Also, the two probabilities add up to 54%. In other words, the two top probabilities add up to about half of the total probability. The prediction for this example is not only wrong, but uncertain accross several classes (labels).
+In the example for the digit "0" below, the network incorrectly predicted it as "5". But it didn't miss by much. The difference in probability between "5" (incorrect) and "0" (correct) is barely 1%. Also, the two probabilities add up to 54%. In other words, the two top probabilities add up to about half of the total probability. The prediction for this example is not only wrong but uncertain across several classes (labels).
 
 SHAP still does what we ask: shows the feature attributions for each class. For the three classes with the highest probability, we can see that:
 
 - Digit "0": The empty middle is the important part, as we have seen in other cases for this digit.
-- Digit "8": The top and bottom parts look like the top and bottom loops of the digit "8", resulting the red areas we see in the attribution. The empty middle is now a detractor for this class (blue). An actual digit "8" would have something here, where the bottom and top loops meet.
-- Digit "5": Left this one for last because it is the one with the highest probability (but not by much) and also the one hardest to explain. It is almost as if just a few
+- Digit "8": The top and bottom parts look like the top and bottom loops of the digit "8", resulting in the red areas we see in the attribution. The empty middle is now a detractor for this class (blue). An actual digit "8" would have something here, where the bottom and top loops meet.
+- Digit "5": Left this one for last because it is the one with the highest probability (but not by much) and also the one hardest to explain. It is almost as if just a few pixels (in red) were enough to assign a probability higher than the correct digit "0".
 
 ![Inaccurate digit 2](figures/inaccurate-digit-0.png)
 
-This example shows an important concept about explanations for black box models: they explain what the model is predicting, but they do not attempt to explain if the predictions are correct.
+This example shows an important concept about explanations for black-box models: they explain what the model is predicting, but they do not attempt to explain if the predictions are correct.
 
 Hence the call to [stop explaining black-box models](https://arxiv.org/abs/1811.10154) (at least for some applications). But this is a battle for another day...
 
 ### Aggregate attributions for accurate vs. inaccurate networks
 
-Instead of plotting attributions one by one, as we saw in the previous examples, SHA
+Instead of plotting attributions one by one, as we saw in the previous examples, SHAP can also plot multiple images in the same plot. One advantage of this plot is that all images share the same SHAP scale.
+
+The plots below show all the attributions for all test digits. The accurate network is on the left and the inaccurate network is on the right.
+
+In the plot for the accurate network we can see that all samples have at least one class (digit) with favorable attributions (red). The plot is dotted with red areas. In the inaccurate network we don't see the same pattern. The plot is mainly gray.
+
+**RESEARCH QUESTION 1**: Giving this pattern, is it possible to use the distribution of attributions across samples to determine if a network is accurate (or not)?
+
+| Accurate                              | Inaccurate                                |
+| ------------------------------------- | ----------------------------------------- |
+| ![Accurate](figures/accurate-all.png) | ![Inaccurate](figures/inaccurate-all.png) |
