@@ -95,7 +95,7 @@ The plots below show all the attributions for all test digits. The accurate netw
 
 In the plot for the accurate network we can see that all samples have at least one class (digit) with favorable attributions (red). The plot is dotted with red areas. In the inaccurate network we don't see the same pattern. The plot is mainly gray.
 
-**RESEARCH QUESTION 1**: Giving this pattern, is it possible to use the distribution of attributions across samples to determine if a network is accurate (or not)?
+**RESEARCH QUESTION 2**: Giving this pattern, is it possible to use the distribution of attributions across samples to determine if a network is accurate (or not)?
 
 | Accurate                              | Inaccurate                                |
 | ------------------------------------- | ----------------------------------------- |
