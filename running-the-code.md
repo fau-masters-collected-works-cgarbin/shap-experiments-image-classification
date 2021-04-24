@@ -27,7 +27,7 @@ Execute these commands to create and activate a [virtual environment]((https://d
 
 ```bash
 #  switch to the directory where the cloned repository is
-cd machine-learning-but-not-understanding
+cd shap-experiments-image-classification
 
 python3 -m venv env
 source env/bin/activate
