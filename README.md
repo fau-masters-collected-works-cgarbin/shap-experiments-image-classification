@@ -34,11 +34,42 @@ This section explores some of the feature attributions resulting from the experi
 
 Before reading further: this is my first foray into the details of feature attribution with SHAP (or any other method). Some of the items reported below are questions I need to investigate further to understand better how feature attribution in general, and SHAP in particular, work.
 
+Some candidates for research questions are noted in the explanations.
+
 ### Accurate network
 
 This section explores the feature attribution using the (fairly) accurate nework. This network achieves 97% accuracy.
 
-Attribution that are easy to interpret
+Each picture below shows these pieces of information:
+
+- The leftmost digit is the example from the MNIST dataset that the network predicted. The text at the top of the picture shows the actual and predicted values. The predicted value is the largest of all probabilities (without applying a threshold).
+- Following that digit, there are ten digits, one for each class (from left to right: zero to nine), with the feature attributions overlaid on each digit. The text at the top shows the probability the network assigned for that class.
+
+Some of the feature attributions are easy to interpret. For example, this is the attribution for a digit "1".
+
+![Accurate digit 1](figures/accurate-digit-1.png)
+
+We can see that the presence of the vertical pixels at the center of the image increase the probability of predicting a digit "1", as we would expect. The absence of pixels around that vertical line also increase the probability.
+
+The two examples for the digit "8" below are also easy to interpret. We can see that the blank space in the top loop and the blank spaces on both sides of the middle part of the image are important to define a "8".
+
+![Accurate digit 8](figures/accurate-digit-8-1.png)
+
+![Accurate digit 8](figures/accurate-digit-8-2.png)
+
+The two examples for the digit "2" below, on the other hand, aren't so easy to interpret. Note that the scale for the SHAP values is different for each example. The range of values in the second example is an order of magnitude larger. It does not affect a comparative analysis, but may be important in other cases to note the scale before judging the attributions.
+
+In the first example we case the what pixels are more relevant (red) to predict the digit "2". We can also see what pixels (in blue) were used to reduce the probability of predicting the digit "7", the second-highest predicted probability.
+
+In the second picture, the more salient attributions are on the second-highest probability, the digit "7". It's almost as if the network "worked harder" to reject that digit than to predict the digit "2". Although the probability of the digit "7" is higher in this second example, it's still far away from the probability assigned to the digit "2".
+
+**RESEARCH QUESTION 1**: What causes SHAP to sometimes to highlight the attributions of a class that was not assigned the highest probability?
+
+![Accurate digit 2](figures/accurate-digit-2-1.png)
+
+![Accurate digit 2](figures/accurate-digit-2-2.png)
+
+
 
 Attributions that don't make much sense
 
