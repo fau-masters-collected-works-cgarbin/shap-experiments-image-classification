@@ -13,7 +13,7 @@ The code is based on the [SHAP MNIST example](https://shap.readthedocs.io/en/sta
 
 The code for the experiments is [on this Jupyter notebook](https://github.com/fau-masters-collected-works-cgarbin/shap-experiments-image-classification/blob/master/shap-experiments-image-classification.ipynb). See the [instructions to run the code](./running-the-code.md) for more details.
 
-## Interpreting SHAP feature attribution
+## Overview of SHAP feature attribution for image classification
 
 SHAP uses colors to explain feature attributions:
 
@@ -27,6 +27,30 @@ The following picture and text come from the [SHAP README](https://github.com/sl
 > The plot above explains ten outputs (digits 0-9) for four different images. Red pixels increase the model's output while blue pixels decrease the output. The input images are shown on the left, and as nearly transparent grayscale backings behind each of the explanations. The sum of the SHAP values equals the difference between the expected model output (averaged over the background dataset) and the current model output. Note that for the 'zero' image the blank middle is important, while for the 'four' image the lack of a connection on top makes it a four instead of a nine.
 
 This is an important part of the explanation: _"Note that for the 'zero' image the blank middle is important, while for the 'four' image the lack of a connection on top makes it a four instead of a nine."_ In other words, it's not only what is present that is important to decide what digit an image is, but also ***what is absent***.
+
+## Experiments
+
+The experiments in the [notebook](https://github.com/fau-masters-collected-works-cgarbin/shap-experiments-image-classification/blob/master/shap-experiments-image-classification.ipynb) show how to use SHAP's DeepExplainer to visualize feature attribution in image classification with neural networks.
+
+SHAP has multiple explainers. The code uses the DeepExplainer explainer because it is the one used in [the image classification SHAP sample code](https://shap.readthedocs.io/en/latest/image_examples.html).
+
+The experiments are as follows:
+
+1. Train a CNN to classify the MNIST dataset.
+1. Show the feature attributions for a subset of the trainig set using SHAP DeepExplainer.
+1. Review and annotate some of the attributions to understand better how they reveal about the model and about the explanation itself.
+1. Repeat the steps above with the CNN that is significantly less accurate.
+
+### An important caveat
+
+> _Explanations must be wrong._ -- [Stop Explaining Black Box Machine Learning Models for High Stakes Decisions and Use Interpretable Models Instead](https://arxiv.org/abs/1811.10154), Cynthia Rudin
+
+As we are going through the exploration of the feature attributions, we must keep in my mind that we are analyzing two items at the same time:
+
+1. What the model predicted.
+1. How the feature attribution explainer _approximates_ what the model consider to make the prediction.
+
+The explainer is an approximation of the model and sometimes (as in this case) also uses an approximation of the input. Therefore, some of the attributions that may not make much sense may be a result of these approximations, not necessarily of the behavior of the model.
 
 ## Some results from the experiments
 
