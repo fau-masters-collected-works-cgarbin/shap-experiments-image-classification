@@ -85,7 +85,7 @@ SHAP still does what we ask: shows the feature attributions for each class. For 
 
 This example shows an important concept about explanations for black-box models: they explain what the model is predicting, but they do not attempt to explain if the predictions are correct.
 
-Hence the call to [stop explaining black-box models](https://arxiv.org/abs/1811.10154) (at least for some applications). But this is a battle for another day...
+Hence the call to [stop explaining black-box models](https://arxiv.org/abs/1811.10154) (at least for some applications). But this is a story for another day...
 
 ### Aggregate attributions for accurate vs. inaccurate networks
 
@@ -95,7 +95,7 @@ The plots below show all the attributions for all test digits. The accurate netw
 
 In the plot for the accurate network we can see that all samples have at least one class (digit) with favorable attributions (red). The plot is dotted with red areas. In the inaccurate network we don't see the same pattern. The plot is mainly gray.
 
-**RESEARCH QUESTION 2**: Giving this pattern, is it possible to use the distribution of attributions across samples to determine if a network is accurate (or not)?
+**RESEARCH QUESTION 2**: Giving this pattern, is it possible to use the distribution of attributions across samples to determine if a network is accurate (or not)? In other words, if all we have is the feature attributions for a resonable number of cases, but don't have the actual vs. predicted labels, could we use that to determine that a network is accurate (or not)?
 
 | Accurate                              | Inaccurate                                |
 | ------------------------------------- | ----------------------------------------- |
