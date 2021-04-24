@@ -38,7 +38,7 @@ Some candidates for research questions are noted in the explanations.
 
 ### Accurate network
 
-This section explores the feature attribution using the (fairly) accurate nework. This network achieves 97% accuracy.
+This section explores the feature attribution using the (fairly) accurate network. This network achieves 97% overal accuracy.
 
 Each picture below shows these pieces of information:
 
@@ -57,11 +57,11 @@ The two examples for the digit "8" below are also easy to interpret. We can see 
 
 ![Accurate digit 8](figures/accurate-digit-8-2.png)
 
-The two examples for the digit "2" below, on the other hand, aren't so easy to interpret. Note that the scale for the SHAP values is different for each example. The range of values in the second example is an order of magnitude larger. It does not affect a comparative analysis, but may be important in other cases to note the scale before judging the attributions.
+In the two examples for the digit "2" below, on the other hand, the first one is easy to interpret, but the attributions for the second make less sense. While reviewing them, note that the scale for the SHAP values is different for each example. The range of values in the second example is an order of magnitude larger. It does not affect a comparative analysis, but may be important in other cases to note the scale before judging the attributions.
 
-In the first example we case the what pixels are more relevant (red) to predict the digit "2". We can also see what pixels (in blue) were used to reduce the probability of predicting the digit "7", the second-highest predicted probability.
+In the first example we can see which pixels are more relevant (red) to predict the digit "2". We can also see what pixels were used to reduce the probability of predicting the digit "7" (blue), the second-highest predicted probability.
 
-In the second picture, the more salient attributions are on the second-highest probability, the digit "7". It's almost as if the network "worked harder" to reject that digit than to predict the digit "2". Although the probability of the digit "7" is higher in this second example, it's still far away from the probability assigned to the digit "2".
+In the second picture, the more salient attributions are on the second-highest probability, the digit "7". It's almost as if the network "worked harder" to reject that digit than to predict the digit "2". Although the probability of the digit "7" is higher in this second example (compared to the digit "7" in the first example), it's still far away from the probability assigned to the digit "2".
 
 **RESEARCH QUESTION 1**: What causes SHAP to sometimes to highlight the attributions of a class that was not assigned the highest probability?
 
@@ -69,8 +69,24 @@ In the second picture, the more salient attributions are on the second-highest p
 
 ![Accurate digit 2](figures/accurate-digit-2-2.png)
 
+### Inaccurate network
 
+This section explores the feature attribution using the inaccurate network. This network achieves 87% overall accuracy. Besides the low overall accuracy, each prediction also has a larger spread of probabilities. The difference between the largest and the second-largest probabiliy in some cases is very small, as we will soon see.
 
-Attributions that don't make much sense
+In the example for the digit "0" below, the network incorrectly predicted it as "5". But it didn't miss by much. The difference in probability between "5" (incorrect) and "0" (correct) is barely 1%. Also, the two probabilities add up to 54%. In other words, the two top probabilities add up to about half of the total probability. The prediction for this example is not only wrong, but uncertain accross several classes (labels).
 
-Why it attributes low probability?
+SHAP still does what we ask: shows the feature attributions for each class. For the three classes with the highest probability, we can see that:
+
+- Digit "0": The empty middle is the important part, as we have seen in other cases for this digit.
+- Digit "8": The top and bottom parts look like the top and bottom loops of the digit "8", resulting the red areas we see in the attribution. The empty middle is now a detractor for this class (blue). An actual digit "8" would have something here, where the bottom and top loops meet.
+- Digit "5": Left this one for last because it is the one with the highest probability (but not by much) and also the one hardest to explain. It is almost as if just a few
+
+![Inaccurate digit 2](figures/inaccurate-digit-0.png)
+
+This example shows an important concept about explanations for black box models: they explain what the model is predicting, but they do not attempt to explain if the predictions are correct.
+
+Hence the call to [stop explaining black-box models](https://arxiv.org/abs/1811.10154) (at least for some applications). But this is a battle for another day...
+
+### Aggregate attributions for accurate vs. inaccurate networks
+
+Instead of plotting attributions one by one, as we saw in the previous examples, SHA
