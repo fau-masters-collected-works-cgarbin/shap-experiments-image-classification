@@ -7,15 +7,25 @@ The goals of the experiments are to:
 1. Explore how SHAP explains the predictions. This experiment uses a (fairly) accurate network to understand how SHAP attributes the predictions.
 1. Explore how SHAP behaves with inaccurate predictions. This experiment uses a network with lower accuracy and prediction probabilities that are less robust (more spread among the classes) to understand how SHAP behaves when the predictions are not reliable (a hat tip to [Dr. Rudin's work](https://arxiv.org/abs/1811.10154)).
 
-SHAP has multiple explainers. The code uses the DeepExplainer explainer because it is the one used in the [image classification SHAP sample code](https://shap.readthedocs.io/en/latest/image_examples.html).
+## Why use SHAP instead of another method?
 
-The code is based on the [SHAP MNIST example](https://shap.readthedocs.io/en/stable/example_notebooks/image_examples/image_classification/PyTorch%20Deep%20Explainer%20MNIST%20example.html), available as a Jupyter notebook [on GitHub](https://github.com/slundberg/shap/blob/master/notebooks/image_examples/image_classification/PyTorch%20Deep%20Explainer%20MNIST%20example.ipynb). This notebook uses the PyTorch sample code because at this time (April 2021), SHAP does not support TensorFlow 2.0. [This GitHub issue](https://github.com/slundberg/shap/issues/850) tracks the work to support TensorFlow 2.0 in SHAP.
+This is my first opportunity to delve into model interpretability down to the code level. I picked [SHAP](https://arxiv.org/abs/1705.07874) ( (SHapley Additive exPlanations)) to get started because of [its promise to unify various methods](https://github.com/slundberg/shap#methods-unified-by-shap) (emphasis ours):
 
-The code for the experiments is [on this Jupyter notebook](https://github.com/fau-masters-collected-works-cgarbin/shap-experiments-image-classification/blob/master/shap-experiments-image-classification.ipynb). See the [instructions to run the code](./running-the-code.md) for more details.
+> ...various methods have recently been proposed to help users interpret the predictions of complex models, but it is often unclear how these methods are related and when one method is preferable over another. To address this problem, **we present a unified framework for interpreting predictions**, SHAP (SHapley Additive exPlanations). SHAP assigns each feature an importance value for a particular prediction. Its novel components include: (1) the identification of a new class of additive feature importance measures. ... The new class unifies six existing methods, ...
 
 ## Overview of SHAP feature attribution for image classification
 
-SHAP uses colors to explain feature attributions:
+### How SHAP works
+
+SHAP is based on [Shapley value](https://en.wikipedia.org/wiki/Shapley_value), a method to calculate the contributions of each player to the outcome of a game. In the case of machine learning, the "players" are the features (e.g. pixels in an image) and the "outcome of a game" is the model's prediction. [This article by Samuelle Mazzanti](https://towardsdatascience.com/shap-explained-the-way-i-wish-someone-explained-it-to-me-ab81cc69ef30) explains with a simple case how to calculate the Shapley value for a simple case. It's a good introduction to understand the mechanics of the process.
+
+The Shapley value is calculated with all possible combinations of players. Given N players, it has to calculate outcomes for 2^N combinations. This is not feasible for large numbers of N. For example, for images N is the number of pixels.
+
+SHAP does not attempt to calculate the actual Shapley value. Instead, it uses sampling and approximations to calculate the SHAP value. See [chapter 4 of the SHAP paper for details](https://arxiv.org/abs/1705.07874).
+
+### Visualizing SHAP attributions
+
+SHAP uses colors to interpret explain attributions:
 
 - Red pixels increases the probability of a class being predicted
 - Blue pixels decrease the probability of a class being predicted
@@ -30,15 +40,17 @@ This is an important part of the explanation: _"Note that for the 'zero' image t
 
 ## Experiments
 
-The experiments in the [notebook](https://github.com/fau-masters-collected-works-cgarbin/shap-experiments-image-classification/blob/master/shap-experiments-image-classification.ipynb) show how to use SHAP's DeepExplainer to visualize feature attribution in image classification with neural networks.
+The [Jupyter notebook](https://github.com/fau-masters-collected-works-cgarbin/shap-experiments-image-classification/blob/master/shap-experiments-image-classification.ipynb) shows how to use SHAP's DeepExplainer to visualize feature attribution in image classification with neural networks. See the [instructions to run the code](./running-the-code.md) for more details.
 
 SHAP has multiple explainers. The code uses the DeepExplainer explainer because it is the one used in [the image classification SHAP sample code](https://shap.readthedocs.io/en/latest/image_examples.html).
+
+The code is based on the [SHAP MNIST example](https://shap.readthedocs.io/en/stable/example_notebooks/image_examples/image_classification/PyTorch%20Deep%20Explainer%20MNIST%20example.html), available as a Jupyter notebook [on GitHub](https://github.com/slundberg/shap/blob/master/notebooks/image_examples/image_classification/PyTorch%20Deep%20Explainer%20MNIST%20example.ipynb). This notebook uses the PyTorch sample code because at this time (April 2021), SHAP does not support TensorFlow 2.0. [This GitHub issue](https://github.com/slundberg/shap/issues/850) tracks the work to support TensorFlow 2.0 in SHAP.
 
 The experiments are as follows:
 
 1. Train a CNN to classify the MNIST dataset.
-1. Show the feature attributions for a subset of the trainig set using SHAP DeepExplainer.
-1. Review and annotate some of the attributions to understand better how they reveal about the model and about the explanation itself.
+1. Show the feature attributions for a subset of the training set using SHAP DeepExplainer.
+1. Review and annotate some of the attributions to understand better what they reveal about the model and about the explanation itself.
 1. Repeat the steps above with the CNN that is significantly less accurate.
 
 ### An important caveat
@@ -48,7 +60,7 @@ The experiments are as follows:
 As we are going through the exploration of the feature attributions, we must keep in my mind that we are analyzing two items at the same time:
 
 1. What the model predicted.
-1. How the feature attribution explainer _approximates_ what the model consider to make the prediction.
+1. How the feature attribution explainer _approximates_ what the model considers to make the prediction.
 
 The explainer is an approximation of the model and sometimes (as in this case) also uses an approximation of the input. Therefore, some of the attributions that may not make much sense may be a result of these approximations, not necessarily of the behavior of the model.
 
@@ -119,8 +131,12 @@ The plots below show all the attributions for all test digits. The accurate netw
 
 In the plot for the accurate network we can see that all samples have at least one class (digit) with favorable attributions (red). The plot is dotted with red areas. In the inaccurate network we don't see the same pattern. The plot is mainly gray.
 
-**RESEARCH QUESTION 2**: Giving this pattern, is it possible to use the distribution of attributions across samples to determine if a network is accurate (or not)? In other words, if all we have is the feature attributions for a resonable number of cases, but don't have the actual vs. predicted labels, could we use that to determine that a network is accurate (or not)?
+**RESEARCH QUESTION 2**: Giving this pattern, is it possible to use the distribution of attributions across samples to determine if a network is accurate (or not)? In other words, if all we have is the feature attributions for a reasonable number of cases, but don't have the actual vs. predicted labels, could we use that to determine that a network is accurate (or not)?
 
 | Accurate                              | Inaccurate                                |
 | ------------------------------------- | ----------------------------------------- |
 | ![Accurate](figures/accurate-all.png) | ![Inaccurate](figures/inaccurate-all.png) |
+
+## Code
+
+See instructions [here](./running-the-code.md) to prepare the environment and run the code.
