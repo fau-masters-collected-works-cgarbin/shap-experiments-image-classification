@@ -137,6 +137,29 @@ In the plot for the accurate network we can see that all samples have at least o
 | ------------------------------------- | ----------------------------------------- |
 | ![Accurate](figures/accurate-all.png) | ![Inaccurate](figures/inaccurate-all.png) |
 
+## Limiations of these experiments
+
+SHAP attributes features based on a baseline input. This is this line of code in the Jupyter notebook:
+
+```python
+    expl = shap.DeepExplainer(model, background_images)
+```
+
+The baseline images are extracted from the test set here:
+
+```python
+images, targets = next(iter(m.test_loader))
+...
+BACKGROUND_SIZE = 100
+background_images = images[:BACKGROUND_SIZE]
+```
+
+The choice of baseline images can significantly affect the SHAP results (the results of any method that relies on baseline images, to be precise), as demonstrated in [Visualizing the Impact of Feature Attribution Baseline](https://distill.pub/2020/attribution-baselines/).
+
+In the experiments we conducted here we used a relatively small set of images for the baseline and we didn't attempt to get an equal distribution of the digits in that baseline (other than a simple manual check of distributions - see the notebook).
+
+**RESEARCH QUESTION 3**: Would a larger number of baseline images, with equal distribution of digits, significantly affect the results? More generically, what is a reasonable number of baseline images to start trusting the results?
+
 ## Code
 
 See instructions [here](./running-the-code.md) to prepare the environment and run the code.
