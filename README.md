@@ -1,6 +1,6 @@
 # Experiments with SHAP and image classification
 
-This repository explores how to interpret predictions of an image classification neural network using [SHAP](https://arxiv.org/abs/1705.07874).
+This repository explores how to interpret predictions of an image classification neural network using [SHAP (SHapley Additive exPlanations)](https://arxiv.org/abs/1705.07874).
 
 The goals of the experiments are to:
 
@@ -9,7 +9,7 @@ The goals of the experiments are to:
 
 ## Why use SHAP instead of another method?
 
-This is my first opportunity to delve into model interpretability down to the code level. I picked [SHAP](https://arxiv.org/abs/1705.07874) ( (SHapley Additive exPlanations)) to get started because of [its promise to unify various methods](https://github.com/slundberg/shap#methods-unified-by-shap) (emphasis ours):
+This is my first opportunity to delve into model interpretability down to the code level. I picked [SHAP (SHapley Additive exPlanations)](https://arxiv.org/abs/1705.07874) to get started because of [its promise to unify various methods](https://github.com/slundberg/shap#methods-unified-by-shap) (emphasis ours):
 
 > ...various methods have recently been proposed to help users interpret the predictions of complex models, but it is often unclear how these methods are related and when one method is preferable over another. To address this problem, **we present a unified framework for interpreting predictions**, SHAP (SHapley Additive exPlanations). SHAP assigns each feature an importance value for a particular prediction. Its novel components include: (1) the identification of a new class of additive feature importance measures. ... The new class unifies six existing methods, ...
 
@@ -17,7 +17,7 @@ This is my first opportunity to delve into model interpretability down to the co
 
 ### How SHAP works
 
-SHAP is based on [Shapley value](https://en.wikipedia.org/wiki/Shapley_value), a method to calculate the contributions of each player to the outcome of a game. In the case of machine learning, the "players" are the features (e.g. pixels in an image) and the "outcome of a game" is the model's prediction. [This article by Samuelle Mazzanti](https://towardsdatascience.com/shap-explained-the-way-i-wish-someone-explained-it-to-me-ab81cc69ef30) explains with a simple case how to calculate the Shapley value for a simple case. It's a good introduction to understand the mechanics of the process.
+SHAP is based on [Shapley value](https://en.wikipedia.org/wiki/Shapley_value), a method to calculate the contributions of each player to the outcome of a game. In the case of machine learning, the "players" are the features (e.g. pixels in an image) and the "outcome of a game" is the model's prediction. [This article by Samuelle Mazzanti](https://towardsdatascience.com/shap-explained-the-way-i-wish-someone-explained-it-to-me-ab81cc69ef30) explains with a simple case how to calculate the Shapley value. It's a good introduction to understand the mechanics of the process.
 
 The Shapley value is calculated with all possible combinations of players. Given N players, it has to calculate outcomes for 2^N combinations. This is not feasible for large numbers of N. For example, for images N is the number of pixels.
 
@@ -25,7 +25,7 @@ SHAP does not attempt to calculate the actual Shapley value. Instead, it uses sa
 
 ### Visualizing SHAP attributions
 
-SHAP uses colors to interpret explain attributions:
+SHAP uses colors to explain attributions:
 
 - Red pixels increases the probability of a class being predicted
 - Blue pixels decrease the probability of a class being predicted
@@ -34,15 +34,15 @@ The following picture and text come from the [SHAP README](https://github.com/sl
 
 ![SHAP example](figures/example-from-shap-readme.png)
 
-> The plot above explains ten outputs (digits 0-9) for four different images. Red pixels increase the model's output while blue pixels decrease the output. The input images are shown on the left, and as nearly transparent grayscale backings behind each of the explanations. The sum of the SHAP values equals the difference between the expected model output (averaged over the background dataset) and the current model output. Note that for the 'zero' image the blank middle is important, while for the 'four' image the lack of a connection on top makes it a four instead of a nine.
+> The plot above explains ten outputs (digits 0-9) for four different images. Red pixels increase the model's output while blue pixels decrease the output. The input images are shown on the left, and as nearly transparent grayscale backings behind each explanations. The sum of the SHAP values equals the difference between the expected model output (averaged over the background dataset) and the current model output. Note that for the 'zero' image the blank middle is important, while for the 'four' image the lack of a connection on top makes it a four instead of a nine.
 
 This is an important part of the explanation: _"Note that for the 'zero' image the blank middle is important, while for the 'four' image the lack of a connection on top makes it a four instead of a nine."_ In other words, it's not only what is present that is important to decide what digit an image is, but also ***what is absent***.
 
 ## Experiments
 
-The [Jupyter notebook](https://github.com/fau-masters-collected-works-cgarbin/shap-experiments-image-classification/blob/master/shap-experiments-image-classification.ipynb) shows how to use SHAP's DeepExplainer to visualize feature attribution in image classification with neural networks. See the [instructions to run the code](./running-the-code.md) for more details.
+This [Jupyter notebook](https://github.com/fau-masters-collected-works-cgarbin/shap-experiments-image-classification/blob/master/shap-experiments-image-classification.ipynb) shows how to use SHAP's DeepExplainer to visualize feature attribution in image classification with neural networks. See the [instructions to run the code](./running-the-code.md) for more details.
 
-SHAP has multiple explainers. The code uses the DeepExplainer explainer because it is the one used in [the image classification SHAP sample code](https://shap.readthedocs.io/en/latest/image_examples.html).
+SHAP has multiple explainers. The notebook uses the DeepExplainer explainer because it is the one used in [the image classification SHAP sample code](https://shap.readthedocs.io/en/latest/image_examples.html).
 
 The code is based on the [SHAP MNIST example](https://shap.readthedocs.io/en/stable/example_notebooks/image_examples/image_classification/PyTorch%20Deep%20Explainer%20MNIST%20example.html), available as a Jupyter notebook [on GitHub](https://github.com/slundberg/shap/blob/master/notebooks/image_examples/image_classification/PyTorch%20Deep%20Explainer%20MNIST%20example.ipynb). This notebook uses the PyTorch sample code because at this time (April 2021), SHAP does not support TensorFlow 2.0. [This GitHub issue](https://github.com/slundberg/shap/issues/850) tracks the work to support TensorFlow 2.0 in SHAP.
 
@@ -62,7 +62,7 @@ As we are going through the exploration of the feature attributions, we must kee
 1. What the model predicted.
 1. How the feature attribution explainer _approximates_ what the model considers to make the prediction.
 
-The explainer is an approximation of the model and sometimes (as in this case) also uses an approximation of the input. Therefore, some of the attributions that may not make much sense may be a result of these approximations, not necessarily of the behavior of the model.
+The explainer is an approximation of the model and sometimes (as in this case) also uses an approximation of the input. Therefore, some of the attributions that may not make much sense may be a result of these approximations, not necessarily of the model's behavior.
 
 ## Some results from the experiments
 
@@ -117,7 +117,7 @@ SHAP still does what we ask: shows the feature attributions for each class. For 
 - Digit "8": The top and bottom parts look like the top and bottom loops of the digit "8", resulting in the red areas we see in the attribution. The empty middle is now a detractor for this class (blue). An actual digit "8" would have something here, where the bottom and top loops meet.
 - Digit "5": Left this one for last because it is the one with the highest probability (but not by much) and also the one hardest to explain. It is almost as if just a few pixels (in red) were enough to assign a probability higher than the correct digit "0".
 
-![Inaccurate digit 2](figures/inaccurate-digit-0.png)
+![Inaccurate digit 0](figures/inaccurate-digit-0.png)
 
 This example shows an important concept about explanations for black-box models: they explain what the model is predicting, but they do not attempt to explain if the predictions are correct.
 
@@ -131,18 +131,18 @@ The plots below show all the attributions for all test digits. The accurate netw
 
 In the plot for the accurate network we can see that all samples have at least one class (digit) with favorable attributions (red). The plot is dotted with red areas. In the inaccurate network we don't see the same pattern. The plot is mainly gray.
 
-**RESEARCH QUESTION 2**: Giving this pattern, is it possible to use the distribution of attributions across samples to determine if a network is accurate (or not)? In other words, if all we have is the feature attributions for a reasonable number of cases, but don't have the actual vs. predicted labels, could we use that to determine that a network is accurate (or not)?
+**RESEARCH QUESTION 2**: Given this pattern, is it possible to use the distribution of attributions across samples to determine if a network is accurate (or not)? In other words, if all we have is the feature attributions for a reasonable number of cases, but don't have the actual vs. predicted labels, could we use that to determine that a network is accurate (or not)?
 
 | Accurate                              | Inaccurate                                |
 | ------------------------------------- | ----------------------------------------- |
 | ![Accurate](figures/accurate-all.png) | ![Inaccurate](figures/inaccurate-all.png) |
 
-## Limiations of these experiments
+## Limitations of these experiments
 
 SHAP attributes features based on a baseline input. This is this line of code in the Jupyter notebook:
 
 ```python
-    expl = shap.DeepExplainer(model, background_images)
+expl = shap.DeepExplainer(model, background_images)
 ```
 
 The baseline images are extracted from the test set here:
