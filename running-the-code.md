@@ -40,7 +40,7 @@ It's important to update `pip` first. Older `pip` versions may fail to install s
 
 ```bash
 pip install --upgrade pip
-pip install -r requirements.txt`
+pip install -r requirements.txt
 ```
 
 ## Running the notebook
