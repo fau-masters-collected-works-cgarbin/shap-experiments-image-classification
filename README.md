@@ -21,7 +21,7 @@ See [this article](https://cgarbin.github.io/machine-learning-interpretability-f
 
 ### How SHAP works
 
-SHAP is based on [Shapley value](https://en.wikipedia.org/wiki/Shapley_value), a method to calculate the contributions of each player to the outcome of a game. See [this article](https://cgarbin.github.io/machine-learning-interpretability-feature-attribution/#shapley-values) for a simple, illustrated example of how to calculation the Shapley value and [this article by Samuelle Mazzanti](https://towardsdatascience.com/shap-explained-the-way-i-wish-someone-explained-it-to-me-ab81cc69ef30) for a more detailed explanation.
+SHAP is based on [Shapley value](https://en.wikipedia.org/wiki/Shapley_value), a method to calculate the contributions of each player to the outcome of a game. See [this article](https://cgarbin.github.io/machine-learning-interpretability-feature-attribution/#shapley-values) for a simple, illustrated example of how to calculate the Shapley value and [this article by Samuelle Mazzanti](https://towardsdatascience.com/shap-explained-the-way-i-wish-someone-explained-it-to-me-ab81cc69ef30) for a more detailed explanation.
 
 The Shapley value is calculated with all possible combinations of players. Given N players, it has to calculate outcomes for 2^N combinations of players. In the case of machine learning, the "players" are the features (e.g. pixels in an image) and the "outcome of a game" is the model's prediction. Calculating the contribution of each feature is not feasible for large numbers of N. For example, for images, N is the number of pixels.
 
