@@ -2,7 +2,7 @@
 # Do not specify versions for those packages here to avoid conflicts with the version SHAP uses
 shap==0.*
 
-# TensorFlow commented out because we are using hte PyTorch examples
+# TensorFlow commented out because we are using the PyTorch examples (see README)
 # tensorflow==2.4.*
 # Tensorflow will also install NumPy, picking a compatible version
 #numpy==
