@@ -15,6 +15,8 @@ This project is my first opportunity to delve into model interpretability at the
 
 > ...various methods have recently been proposed to help users interpret the predictions of complex models, but it is often unclear how these methods are related and when one method is preferable over another. To address this problem, **we present a unified framework for interpreting predictions**, SHAP (SHapley Additive exPlanations). SHAP assigns each feature an importance value for a particular prediction. Its novel components include: (1) the identification of a new class of additive feature importance measures. ... The new class unifies six existing methods, ...
 
+See [this article](https://cgarbin.github.io/machine-learning-interpretability-feature-attribution/) for an overview of other feature attribution methods.
+
 ## Overview of SHAP feature attribution for image classification
 
 ### How SHAP works
