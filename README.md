@@ -15,7 +15,7 @@ This project is my first opportunity to delve into model interpretability at the
 
 > ...various methods have recently been proposed to help users interpret the predictions of complex models, but it is often unclear how these methods are related and when one method is preferable over another. To address this problem, **we present a unified framework for interpreting predictions**, SHAP (SHapley Additive exPlanations). SHAP assigns each feature an importance value for a particular prediction. Its novel components include: (1) the identification of a new class of additive feature importance measures. ... The new class unifies six existing methods, ...
 
-See [this article](https://cgarbin.github.io/machine-learning-interpretability-feature-attribution/) for an overview of other feature attribution methods.
+See [this article](https://cgarbin.github.io/machine-learning-interpretability-feature-attribution/) for an overview of other feature attribution methods and their limitations.
 
 ## Overview of SHAP feature attribution for image classification
 
@@ -66,7 +66,7 @@ As we are going through the exploration of the feature attributions, we must kee
 1. What the model predicted.
 1. How the feature attribution explainer *approximates* what the model considers to make the prediction.
 
-The explainer *approximates* the model and sometimes (as in this case) also uses an approximation of the input. Therefore, some of the attributions that may not make much sense may result from these approximations, not necessarily the model's behavior.
+The explainer *approximates* the model and sometimes (as in this case) also uses an approximation of the input. Therefore, some of the attributions that may not make much sense may result from these approximations, not necessarily the model's behavior. More about that on [this post](https://cgarbin.github.io/machine-learning-interpretability-feature-attribution/).
 
 ## Some results from the experiments
 
@@ -78,7 +78,7 @@ Some candidates for research questions are noted in the explanations.
 
 ### Accurate network
 
-This section explores feature attribution using the (fairly) accurate network. This network achieves 97% overall accuracy.
+This section explores SHAP feature attribution using the (fairly) accurate network. This network achieves 97% overall accuracy.
 
 Each picture below shows these pieces of information:
 
@@ -111,7 +111,7 @@ In the second picture, the more salient attributions are on the second-highest p
 
 ### Inaccurate network
 
-This section explores feature attribution using the inaccurate network. This network achieves 87% overall accuracy. Besides the low overall accuracy, each prediction has a larger probability spread. In some cases, the difference between the largest and the second-largest probability is very small, as we will soon see.
+This section explores SHAP feature attribution using the inaccurate network. This network achieves 87% overall accuracy. Besides the low overall accuracy, each prediction has a larger probability spread. In some cases, the difference between the largest and the second-largest probability is very small, as we will soon see.
 
 In the example for the digit "0" below, the network incorrectly predicted it as "5". But it didn't miss by much. The difference in probability between "5" (incorrect) and "0" (correct) is barely 1%. Also, the two probabilities add up to 54%. In other words, the two top probabilities add up to about half of the total probability. The prediction for this example is not only wrong but uncertain across several classes (labels).
 
